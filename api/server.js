@@ -15,17 +15,31 @@ const cohere = new CohereClient({
 
 let chatHistory = []; // Store this in your application state
 
+// Endpoint to clear chat history
+app.post("/clear-history", (req, res) => {
+    console.log("cleared chat history");
+    chatHistory = [];
+    res.json({ message: "Chat history cleared" });
+});
+
 app.post("/generate", async (req, res) => {
     const { prompt } = req.body;
+    console.log(chatHistory);
 
     try {
         const stream = await cohere.chatStream({
-            model: "command-r-plus-08-2024",
+            model: "command-r-08-2024",
             message: prompt,
             temperature: 0.3,
             chatHistory: chatHistory,
             promptTruncation: "AUTO",
             connectors: [{ id: "web-search" }],
+            // tools: [
+            //     {
+            //         name: "internet_search",
+            //         description: "Search the internet for current information",
+            //     },
+            // ],
         });
 
         let generatedText = "";
@@ -40,6 +54,7 @@ app.post("/generate", async (req, res) => {
         chatHistory.push({ role: "USER", message: prompt });
         chatHistory.push({ role: "CHATBOT", message: generatedText });
 
+        // console.log(chatHistory);
         res.json({ response: generatedText });
     } catch (error) {
         console.error(error.response?.data || error.message);
