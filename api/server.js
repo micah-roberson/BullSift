@@ -5,29 +5,27 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json()); // Parse incoming JSON requests
+app.use(express.json());
 
 app.post('/generate', async (req, res) => {
-    const { prompt } = req.body; // Get the prompt from the client
+    const { prompt } = req.body;
 
     try {
-        // Make a request to Cohere API
         const response = await axios.post(
             'https://api.cohere.ai/v1/generate',
             {
-                model: 'command', // Use 'command' model for text generation
+                model: 'command',
                 prompt: prompt,
-                max_tokens: 100 // Adjust token limit as needed
+                max_tokens: 100
             },
             {
                 headers: {
-                    'Authorization': `Bearer ${process.env.COHERE_API_KEY}`, // API key stored in environment variables
+                    'Authorization': `Bearer ${process.env.COHERE_API_KEY}`,
                     'Content-Type': 'application/json'
                 }
             }
         );
 
-        // Send the generated text back to the client
         res.json(response.data);
     } catch (error) {
         console.error(error.response?.data || error.message);
