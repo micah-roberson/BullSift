@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("resultSection").classList.add("hidden");
 
         slider.value = 50;
-        confidenceDisplay.textContent = "50%";
+        confidenceDisplay.textContent = "50";
 
         document.getElementById("yesOption").checked = false;
         document.getElementById("noOption").checked = false;
