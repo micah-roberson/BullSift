@@ -63,3 +63,76 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     }
   }
   
+  function changeIconIntelligent(){
+    chrome.storage.local.get(['currentUrl'], (result) => {
+      const currentUrl = result.currentUrl;
+  
+      if (!currentUrl) {
+          console.log("No URL found.");
+          return;
+      }
+      console.log(currentUrl);
+  
+      // Your API endpoint
+      const apiUrl = 'https://bullsiftapi.onrender.com/generate';
+  
+      // Prepare the request body
+      const requestBody = {
+        prompt: `Is the following link at risk of containing any fake or suspicious information? Respond with only 'yes' or 'no'. URL: ${currentUrl}`
+      };
+  
+      // Make the API call using fetch
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Check the API response
+        const result = data?.generations[0]?.text.trim().toLowerCase();
+        console.log(result);
+        if (result === "no") {
+          console.log("no!");
+          // Set icon to bullsift1 (fraudulent website icon)
+          chrome.action.setIcon({
+            path: {
+              "16": "icons/bullsift1-16.png",
+              "48": "icons/bullsift1-48.png",
+              "128": "icons/bullsift1-128.png"
+            }
+          }, () => {
+            if (chrome.runtime.lastError) {
+              console.error(`Error setting icon to bullsift1: ${chrome.runtime.lastError.message}`);
+            } else {
+              console.log("Icon changed to bullsift1!");
+            }
+          });
+        } else if (result === "yes") {
+          console.log("yes!");
+          // Set icon to bullsift2 (non-fraudulent website icon)
+          chrome.action.setIcon({
+            path: {
+              "16": "icons/bullsift2-16.png",
+              "48": "icons/bullsift2-48.png",
+              "128": "icons/bullsift2-128.png"
+            }
+          }, () => {
+            if (chrome.runtime.lastError) {
+              console.error(`Error setting icon to bullsift2: ${chrome.runtime.lastError.message}`);
+            } else {
+              console.log("Icon changed to bullsift2!");
+            }
+          });
+        } else {
+          console.log("Unexpected response from the API");
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching from API:', error);
+      });
+    });
+  }
+    
