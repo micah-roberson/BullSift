@@ -1,20 +1,31 @@
-// document.addEventListener("DOMContentLoaded", () => {
-//   // null here defaults to active tab of current window
-//   chrome.tabs.executeScript(null, {
-//     code: `
-//       document.querySelector("title").innerText;
-//     `
-//   }, response => {
-//     const pageData = response[0];
+document.addEventListener("DOMContentLoaded", () => {
+  chrome.storage.local.get(["pageData", "apiResponse"], function (result) {
+      if (result.pageData) {
+          document.getElementById("activeTabTitle").textContent = result.pageData.pageTitle;
+          // Display other pageData if needed
+      }
 
-//     if (!pageData) {
-//       console.log("Could not get data from page.");
-//       return;
-//     }
+      if (result.apiResponse) {
+          displayApiResponse(result.apiResponse);
+      } else {
+          document.getElementById("apiResponse").textContent = "No API response available.";
+      }
+  });
+});
 
-//     document.getElementById("activeTabTitle").innerText = pageData;
-//   });
-// });
+function displayApiResponse(apiResponse) {
+    const responseElement = document.getElementById("apiResponse");
+
+    // Clear any existing content
+    responseElement.innerHTML = "";
+
+    // Create and append elements based on the structure of apiResponse
+    for (const [key, value] of Object.entries(apiResponse)) {
+        const item = document.createElement("div");
+        item.innerHTML = `<strong>${key}:</strong> ${value}`;
+        responseElement.appendChild(item);
+    }
+}
 
 document.getElementById('send').addEventListener('click', async () => {
   const userInput = document.getElementById('user-input').value;
