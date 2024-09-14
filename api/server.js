@@ -24,7 +24,6 @@ app.post("/clear-history", (req, res) => {
 
 app.post("/generate", async (req, res) => {
     const { prompt } = req.body;
-    console.log(chatHistory);
 
     try {
         const stream = await cohere.chatStream({
@@ -54,7 +53,7 @@ app.post("/generate", async (req, res) => {
         chatHistory.push({ role: "USER", message: prompt });
         chatHistory.push({ role: "CHATBOT", message: generatedText });
 
-        // console.log(chatHistory);
+        console.log(chatHistory.length);
         res.json({ response: generatedText });
     } catch (error) {
         console.error(error.response?.data || error.message);
