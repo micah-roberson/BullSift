@@ -1,11 +1,22 @@
+// Function to call when navigating to a new page
+function clearChatHistory() {
+    fetch("http://localhost:3000/clear-history", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => console.log(data.message))
+        .catch((error) => console.error("Error clearing chat history:", error));
+}
+
+// Call this function when the page loads or when navigation occurs
+clearChatHistory();
+
 function extractPageData() {
     const pageData = {
-        pageTitle: document.title,
-        metaDescription: document.querySelector('meta[name="description"]')?.content || "",
-        headings: Array.from(document.querySelectorAll("h1, h2, h3")).map((h) => h.innerText),
-        links: Array.from(document.links).map((link) => ({ href: link.href, text: link.innerText })),
         mainContent: document.querySelector("main")?.innerText || document.body.innerText,
-        images: Array.from(document.images).map((img) => ({ src: img.src, alt: img.alt })),
     };
 
     console.log(pageData);
@@ -18,7 +29,7 @@ function extractPageData() {
         },
         body: JSON.stringify({
             // prompt: "Is the following article fake news? " + pageData.mainContent,
-            prompt: `Analyze the following article text and identify any language that appears sensationalist or exaggerated. Provide phrases that seem manipulative and indicate whether the claims in those phrases are supported by factual evidence: ${pageData.mainContent}`,
+            prompt: `Based on the credibility of the sources, consistency with known facts, and presence of emotional or biased language, provide a Yes/No answer as to whether the article is fake news, and provide a number confidence score only for the following article between 0-100 for how confident you are in your prediction. Answer in the format of '{Yes/No}, {confidence score}', e.g. 'No, 95': ${pageData.mainContent}`,
         }),
     })
         .then((response) => response.json())
