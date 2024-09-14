@@ -1,13 +1,20 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Bullsift",
   "description": "Sifting through the bull to find the facts.",
   "version": "0.0.1",
-  "browser_action": {
-    "default_icon": "Bullsift.png",
+  "action": {
+    "default_icon": "bullsift1.png",
     "default_popup": "popup.html"
   },
   "permissions": [
     "activeTab"
-  ]
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }
