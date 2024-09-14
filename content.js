@@ -8,9 +8,32 @@ function extractPageData() {
         images: Array.from(document.images).map((img) => ({ src: img.src, alt: img.alt })),
     };
 
-    // chrome.storage.local.set({ pageData: pageData }, function () {
-    //     console.log("Page data saved");
-    // });
+    // Make POST request to the API with the specified body format
+    fetch("https://bullsiftapi.onrender.com/generate", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            prompt: "Is the following article fake news? " + pageData.mainContent,
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log("API Success:", data);
+            // Store the response data
+            chrome.storage.local.set({ apiResponse: data }, function () {
+                console.log("API response saved");
+            });
+        })
+        .catch((error) => {
+            console.error("API Error:", error);
+        });
+
+    // Still store the original page data
+    chrome.storage.local.set({ pageData: pageData }, function () {
+        console.log("Page data saved");
+    });
 }
 
 if (document.readyState === "loading") {
