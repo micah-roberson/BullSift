@@ -8,8 +8,10 @@ function extractPageData() {
         images: Array.from(document.images).map((img) => ({ src: img.src, alt: img.alt })),
     };
 
+    console.log(pageData);
     // Make POST request to the API with the specified body format
-    fetch("https://bullsiftapi.onrender.com/generate", {
+    // TODO: change to https://bullsiftapi.onrender.com/generate
+    fetch("http://localhost:3000/generate", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
