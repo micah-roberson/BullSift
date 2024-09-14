@@ -15,7 +15,8 @@ function extractPageData() {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            prompt: "Is the following article fake news? " + pageData.mainContent,
+            // prompt: "Is the following article fake news? " + pageData.mainContent,
+            prompt: `Analyze the following article text and identify any language that appears sensationalist or exaggerated. Provide phrases that seem manipulative and indicate whether the claims in those phrases are supported by factual evidence: ${pageData.mainContent}`,
         }),
     })
         .then((response) => response.json())
