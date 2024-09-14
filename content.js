@@ -1,26 +1,51 @@
-function extractPageData() {
-    const pageData = {
-        pageTitle: document.title,
-        metaDescription: document.querySelector('meta[name="description"]')?.content || "",
-        headings: Array.from(document.querySelectorAll("h1, h2, h3")).map((h) => h.innerText),
-        links: Array.from(document.links).map((link) => ({ href: link.href, text: link.innerText })),
-        mainContent: document.querySelector("main")?.innerText || document.body.innerText,
-        images: Array.from(document.images).map((img) => ({ src: img.src, alt: img.alt })),
-    };
-
-    console.log(pageData);
-    // Make POST request to the API with the specified body format
-    // TODO: change to https://bullsiftapi.onrender.com/generate
-    fetch("http://localhost:3000/generate", {
+// Function to call when navigating to a new page
+function clearChatHistory() {
+    fetch("http://localhost:3000/clear-history", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-            // prompt: "Is the following article fake news? " + pageData.mainContent,
-            prompt: `Analyze the following article text and identify any language that appears sensationalist or exaggerated. Provide phrases that seem manipulative and indicate whether the claims in those phrases are supported by factual evidence: ${pageData.mainContent}`,
-        }),
     })
+        .then((response) => response.json())
+        .then((data) => console.log(data.message))
+        .catch((error) => console.error("Error clearing chat history:", error));
+}
+
+// Call this function when the page loads or when navigation occurs
+clearChatHistory();
+
+function extractPageData() {
+    const pageData = {
+        mainContent: document.querySelector("main")?.innerText || document.body.innerText,
+    };
+    console.log(pageData);
+
+    const PROMPT_1 = `Identify sensationalist or exaggerated phrases in the article below. Please answer in 100 words or less. Article: ${pageData.mainContent}`;
+    const PROMPT_2 =
+        "Based on the credibility of the sources, consistency with known facts, and presence of emotional or biased language, provide a Yes/No answer as to whether the article is fake news, and provide a number confidence score only for the following article between 0-100 for how confident you are in your prediction. Answer in the format of '{Yes/No}, {confidence score}', e.g. 'No, 95'";
+    const PROMPT_3 =
+        "Highlight discrepancies between the article's claims and known facts. Summarize in less than 100 words.";
+    const PROMPT_4 = "Check the credibility of sources mentioned in the article. Summarize in less than 100 words.";
+    const PROMPT_5 =
+        "In this case, satirical news should be classified as fake news. Based on the credibility of the sources, consistency with known facts, and presence of emotional or biased language, provide a Yes/No answer as to whether the article is fake news, and provide a number confidence score only for the following article between 0-100 for how confident you are in your prediction.  Answer in the format of '{Yes/No}, {confidence score}, {< 100 word explanation}', e.g. 'No, 95'";
+
+    // Make POST request to the API with the specified body format
+    // TODO: change to https://bullsiftapi.onrender.com/generate
+    function generateResponse(prompt) {
+        return fetch("http://localhost:3000/generate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ prompt }),
+        });
+    }
+
+    generateResponse(PROMPT_1);
+    generateResponse(PROMPT_2);
+    generateResponse(PROMPT_3);
+    generateResponse(PROMPT_4);
+    generateResponse(PROMPT_5)
         .then((response) => response.json())
         .then((data) => {
             console.log("API Success:", data);

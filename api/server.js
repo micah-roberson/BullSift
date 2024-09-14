@@ -1,7 +1,7 @@
-const express = require('express');
-const axios = require('axios');
-const cors = require('cors');
-require('dotenv').config();
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
+const { CohereClient } = require("cohere-ai");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,29 +9,55 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-app.post('/generate', async (req, res) => {
+const cohere = new CohereClient({
+    token: process.env.COHERE_API_KEY, // Store your API key in .env file
+});
+
+let chatHistory = []; // Store this in your application state
+
+// Endpoint to clear chat history
+app.post("/clear-history", (req, res) => {
+    console.log("cleared chat history");
+    chatHistory = [];
+    res.json({ message: "Chat history cleared" });
+});
+
+app.post("/generate", async (req, res) => {
     const { prompt } = req.body;
 
     try {
-        const response = await axios.post(
-            'https://api.cohere.ai/v1/generate',
-            {
-                model: 'command',
-                prompt: prompt,
-                max_tokens: 100
-            },
-            {
-                headers: {
-                    'Authorization': `Bearer ${process.env.COHERE_API_KEY}`,
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
+        const stream = await cohere.chatStream({
+            model: "command-r-08-2024",
+            message: prompt,
+            temperature: 0.3,
+            chatHistory: chatHistory,
+            promptTruncation: "AUTO",
+            connectors: [{ id: "web-search" }],
+            // tools: [
+            //     {
+            //         name: "internet_search",
+            //         description: "Search the internet for current information",
+            //     },
+            // ],
+        });
 
-        res.json(response.data);
+        let generatedText = "";
+
+        for await (const chat of stream) {
+            if (chat.eventType === "text-generation") {
+                generatedText += chat.text;
+            }
+        }
+
+        // Update chat history for next call
+        chatHistory.push({ role: "USER", message: prompt });
+        chatHistory.push({ role: "CHATBOT", message: generatedText });
+
+        console.log(chatHistory.length);
+        res.json({ response: generatedText });
     } catch (error) {
         console.error(error.response?.data || error.message);
-        res.status(500).json({ error: 'Failed to generate text' });
+        res.status(500).json({ error: "Failed to generate text" });
     }
 });
 
