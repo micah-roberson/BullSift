@@ -1,7 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+  console.log("popup starting")
   // Fetch isWebsiteSafe from chrome.storage.local
   chrome.storage.local.get(['isWebsiteSafe'], function(result) {
     const isWebsiteSafe = result.isWebsiteSafe;
+    let totalPoints = localStorage.getItem('totalPoints') ? parseInt(localStorage.getItem('totalPoints')) : 0;
+
+    const totalPointsDisplay = document.getElementById("totalPoints");
+    totalPointsDisplay.textContent = totalPoints;
 
     if (isWebsiteSafe) {
       // If website is safe, show the disabledPage and hide other sections
@@ -12,10 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       document.getElementById('disabledPage').classList.add('hidden'); // Show the safe page message
       // Website is not safe, continue with normal functionality
-      let totalPoints = localStorage.getItem('totalPoints') ? parseInt(localStorage.getItem('totalPoints')) : 0;
-
-      const totalPointsDisplay = document.getElementById("totalPoints");
-      totalPointsDisplay.textContent = totalPoints;
 
       const slider = document.getElementById("confidenceSlider");
       const confidenceDisplay = document.getElementById("confidenceValue");
@@ -27,16 +28,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const answerButton = document.getElementById("answerButton");
 
       // Create the "Congratulations on 100 points" text, hidden initially
-      const congratulationsText = document.createElement('div');
-      congratulationsText.textContent = 'Congratulations on 100 points!';
-      congratulationsText.style.display = 'none'; // Hidden initially
-      congratulationsText.style.textAlign = 'center';
-      congratulationsText.style.marginTop = '20px';
-      congratulationsText.style.fontSize = '18px';
-      congratulationsText.style.fontWeight = 'bold';
-      congratulationsText.style.color = 'green';
+    //   const congratulationsText = document.createElement('div');
+    //   congratulationsText.textContent = 'Congratulations on 100 points!';
+    //   congratulationsText.style.display = 'none'; // Hidden initially
+    //   congratulationsText.style.textAlign = 'center';
+    //   congratulationsText.style.marginTop = '20px';
+    //   congratulationsText.style.fontSize = '18px';
+    //   congratulationsText.style.fontWeight = 'bold';
+    //   congratulationsText.style.color = 'green';
 
-      document.body.appendChild(congratulationsText); // Append the congratulatory text to the body or container
+    //   document.body.appendChild(congratulationsText); // Append the congratulatory text to the body or container
 
       answerButton.addEventListener('click', () => {
         const yesOption = document.getElementById('yesOption').checked;
@@ -102,9 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem("totalPoints", totalPoints);
 
             // Show "Congratulations" text when points reach 100
-            if (totalPoints >= 100) {
-                congratulationsText.style.display = "block"; // Show the congratulations text
-            }
+            // if (totalPoints >= 100) {
+            //     congratulationsText.style.display = "block"; // Show the congratulations text
+            // }
 
             // Fetch page data and API response from chrome.storage.local
             chrome.storage.local.get(["apiResponse"], function (result) {
@@ -121,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const restartButton = document.getElementById("restartButton");
     restartButton.addEventListener("click", () => {
+        chrome.storage.local.set({ answerSubmitted: true });
         document.getElementById("questionSection").classList.remove("hidden"); // Show question section again
         answerButton.classList.remove("hidden");
 
@@ -136,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
         pointsText.classList.remove("points-positive", "points-negative");
         pointsText.textContent = "";
 
-        congratulationsText.style.display = 'none'; // Hide congratulations text on restart
+        // congratulationsText.style.display = 'none'; // Hide congratulations text on restart
       });
     }
   });
