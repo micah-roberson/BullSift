@@ -105,7 +105,7 @@ function changeIconIntelligent() {
           console.log("URL is safe, changing icon accordingly.");
           randomlyChangeIcon();
           //setIcon('bullsift1');
-          chrome.storage.local.set({ isWebsiteSafe: true });
+          //chrome.storage.local.set({ isWebsiteSafe: true });
         } else if (result === "yes") {
           console.log("URL might be unsafe, changing icon accordingly.");
           setIcon('bullsift2');
