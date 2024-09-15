@@ -21,13 +21,10 @@ function extractPageData() {
     console.log(pageData);
 
     const PROMPT_1 = `Identify sensationalist or exaggerated phrases in the article below. Please answer in 100 words or less. Article: ${pageData.mainContent}`;
-    const PROMPT_2 =
-        "Based on the credibility of the sources, consistency with known facts, and presence of emotional or biased language, provide a Yes/No answer as to whether the article is fake news, and provide a number confidence score only for the following article between 0-100 for how confident you are in your prediction. Answer in the format of '{Yes/No}, {confidence score}', e.g. 'No, 95'";
-    const PROMPT_3 =
-        "Highlight discrepancies between the article's claims and known facts. Summarize in less than 100 words.";
-    const PROMPT_4 = "Check the credibility of sources mentioned in the article. Summarize in less than 100 words.";
-    const PROMPT_5 =
-        "In this case, satirical news should be classified as fake news. Based on the credibility of the sources, consistency with known facts, and presence of emotional or biased language, provide a Yes/No answer as to whether the article is fake news, and provide a number confidence score only for the following article between 0-100 for how confident you are in your prediction.  Answer in the format of '{Yes/No}, {confidence score}, {< 100 word explanation}', e.g. 'No, 95'";
+    const PROMPT_2 = "List the sources mentioned in this article and flag any that are known to be unreliable. Summarize in less than 100 words.";
+    const PROMPT_3 = "Highlight discrepancies between the article's claims and known facts. Summarize in less than 100 words.";
+    const PROMPT_4 = "Analyze the emotional tone of the article and note if it's biased. Summarize in less than 100 words.";
+    const PROMPT_5 = "Provide a veracity score (0-5 where 5 is very fake and 0 is truthful) for the article based on credibility and bias. In case of Satire it should be prompted as fake news. Answer in the format of '{Yes/No}, {confidence score between 0-5}, {< 50 word explanation}',  {short statement of what type of bias: Political or Satire or Academic} , e.g. 'No, 4, The articaly says .... It is biased politically'";
 
     // Make POST request to the API with the specified body format
     // TODO: change to https://bullsiftapi.onrender.com/generate
