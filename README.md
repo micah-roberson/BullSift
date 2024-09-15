@@ -7,22 +7,26 @@ Bullsift acts as a "firewall" against fake news. It assesses the safety and cred
 ## How we built it 🔧
 We developed a Chrome extension that seamlessly integrates into your browsing experience, offering real-time content analysis for fake news detection. Powered by Cohere's Command R Model, our multi-layer detection system ensures users are equipped with tools to verify the credibility of online information. Each layer of detection is carefully engineered to deliver comprehensive insights, ensuring a smooth and intuitive user experience. The layers include:
 
-Sensationalism Detection: Used to spot exaggerated phrases within articles.
-Source Credibility Verification: Cross-referencing sources to evaluate trustworthiness.
-Fact-Checking Automation: Comparing claims to trusted news outlets to highlight any discrepancies.
-Fakeness Scoring System: Providing a detailed "fakeness score," based on bias and credibility analysis.
-Challenges we ran into 🏁
-Defining and grading truthfulness was complex, requiring accurate detection of bias and sensationalism.
-Integrating multiple API calls synchronously for the multi-layer detection system was technically challenging.
-Making the experience fun and engaging, especially for grandparents.
-Accomplishments that we're proud of 🌟
-Developing a highly accurate detection system that flags misinformation in real-time using Cohere’s powerful AI.
-Creating a fun and engaging learning experience for grandparents, encouraging critical thinking and empowering them to spot fake news.
-Designing a user-friendly, interactive, and aesthetically pleasing UI/UX that simplifies complex processes.
-What we learned 📖
-Using Cohere’s LLM models in different ways to achieve the fakeness detection system
-Grinding with 2 hours of sleep!
-What's next for Bullsift 📈
+- Sensationalism Detection: Used to spot exaggerated phrases within articles.
+- Source Credibility Verification: Cross-referencing sources to evaluate trustworthiness.
+- Fact-Checking Automation: Comparing claims to trusted news outlets to highlight any discrepancies.
+- Fakeness Scoring System: Providing a detailed "fakeness score," based on bias and credibility analysis.
+
+## Challenges we ran into 🏁
+- Defining and grading truthfulness was complex, requiring accurate detection of bias and sensationalism.
+- Integrating multiple API calls synchronously for the multi-layer detection system was technically challenging.
+- Making the experience fun and engaging, especially for grandparents.
+
+## Accomplishments that we're proud of 🌟
+- Developing a highly accurate detection system that flags misinformation in real-time using Cohere’s powerful AI.
+- Creating a fun and engaging learning experience for grandparents, encouraging critical thinking and empowering them to spot fake news.
+- Designing a user-friendly, interactive, and aesthetically pleasing UI/UX that simplifies complex processes.
+
+## What we learned 📖
+- Using Cohere’s LLM models in different ways to achieve the fakeness detection system
+- Grinding with 2 hours of sleep!
+
+## What's next for Bullsift 📈
 Our next step is to implement a feature that allows parents to monitor their children's exposure to fake news, offering a safeguard against repeated exposure to harmful misinformation and encouraging healthier online habits.
 
 ## To test out this extension
