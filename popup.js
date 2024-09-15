@@ -60,8 +60,15 @@ document.addEventListener('DOMContentLoaded', () => {
         let correctAnswer;
         chrome.storage.local.get(["apiResponse"], function (result) {
             if (result.apiResponse) {
-                console.log(result.apiResponse);
-                correctAnswer = result.apiResponse.response.split(",")[0].toLowerCase();
+                console.log(result.apiResponse["data5"]);
+
+                // Assuming that the score is a number in the format {score}, the first part of the response
+                const score = parseInt(result.apiResponse["data5"].response.split(",")[0]);
+                console.log(score);
+
+                // Set correctAnswer based on the score
+                correctAnswer = score >= 50 ? "yes" : "no";
+
                 proceedWithCode();
             } else {
                 // Wait for apiResponse to be available
@@ -69,7 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     chrome.storage.local.get(["apiResponse"], function (newResult) {
                         if (newResult.apiResponse) {
                             clearInterval(checkApiResponse);
-                            correctAnswer = newResult.apiResponse.response.split(",")[0].toLowerCase();
+                            const score = parseInt(result.apiResponse["data5"].response.split(",")[0]);
+                            console.log(score);
+
+                            // Set correctAnswer based on the score
+                            correctAnswer = score >= 50 ? "yes" : "no";
                             // Continue with the rest of the code here
                             proceedWithCode();
                         }
@@ -84,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Calculate points to award or deduct
             const pointsToAwardOrDeduct = Math.round((confidenceValue / 100) * 15); // Percentage of 15 points based on confidence
+            // TODO: check answerSubmitted variable
 
             if ((correctAnswer === "yes" && yesOption) || (correctAnswer === "no" && noOption)) {
                 // User answered correctly, award points based on confidence
@@ -151,10 +163,17 @@ function displayApiResponse(apiResponse) {
     // Clear any existing content
     responseElement.innerHTML = "";
 
+    console.log("Heres the api response: ");
+    console.log(apiResponse);
+
+
     // Create and append elements based on the structure of apiResponse
     for (const [key, value] of Object.entries(apiResponse)) {
+        if (key == "data5") {
+            continue;
+        }
         const item = document.createElement("div");
-        item.innerHTML = `<strong>${key}:</strong> ${value}`;
+        item.innerHTML = `<strong>${value.response}`;
         responseElement.appendChild(item);
     }
 }
