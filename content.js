@@ -1,6 +1,6 @@
 // Function to call when navigating to a new page
 async function clearChatHistory() {
-    return fetch("http://localhost:3000/clear-history", {
+    return fetch("https://bullsiftapi.onrender.com/clear-history", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -16,7 +16,7 @@ async function extractPageData() {
     };
     console.log(pageData);
 
-    const PROMPT_1 = `Identify sensationalist or exaggerated phrases in the article below. Please answer in 100 words or less. Article: ${pageData.mainContent}`;
+    const PROMPT_1 = `Identify sensationalist or exaggerated phrases in the article below. Begin your response with "Here are some potentiallysensationalist or exaggerated phrases:". Please answer in 100 words or less. Article: ${pageData.mainContent}`;
     const PROMPT_2 =
         "List the sources mentioned in this article and flag any that are known to be unreliable. Summarize in less than 100 words.";
     const PROMPT_3 =
