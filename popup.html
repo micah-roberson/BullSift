@@ -41,11 +41,14 @@
 
     #explanationBox {
       border: 1px solid #ddd;
+      height: 300px;      
+      overflow-y: auto; 
       border-radius: 12px;
       padding: 15px;
-      font-size: 16px;
+      font-size: 14px;
       margin: 20px 0;
       background-color: #fafafa;
+      width: 220px;
     }
 
     /* Header styling with logo and text aligned horizontally */
@@ -192,7 +195,9 @@
       <h2 id="resultText"></h2>
 
       <div id="explanationBox">
-        This is the explanation text. You can provide any details here about why the answer is correct or incorrect.
+        <p>
+          This is the explanation text. You can provide any details here about why the answer is correct or incorrect.
+        </p>
       </div>
 
       <p id="pointsText" class="points-text"></p>
