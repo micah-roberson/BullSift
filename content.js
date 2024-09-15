@@ -1,6 +1,6 @@
 // Function to call when navigating to a new page
 function clearChatHistory() {
-    fetch("http://localhost:3000/clear-history", {
+    fetch("https://bullsiftapi.onrender.com/clear-history", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -39,7 +39,7 @@ async function extractPageData() {
     // }
 
     async function generateResponse(prompt) {
-        return fetch("http://localhost:3000/generate", {
+        return fetch("https://bullsiftapi.onrender.com/generate", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

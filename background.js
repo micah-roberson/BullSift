@@ -60,7 +60,7 @@ function setIcon(iconName) {
 
 // Main function to intelligently change the icon based on API response
 function changeIconIntelligent() {
-  fetch("http://localhost:3000/clear-history", {
+  fetch("https://bullsiftapi.onrender.com/clear-history", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -83,7 +83,7 @@ function changeIconIntelligent() {
 
     console.log("Checking URL: " + currentUrl);
 
-    const apiUrl = 'http://localhost:3000/generate';
+    const apiUrl = 'https://bullsiftapi.onrender.com/generate';
     const prompt = `Is the following link at risk of containing any fake or suspicious information? Respond with only 'yes' or 'no', with no period. URL: ${currentUrl}`;
 
     fetch(apiUrl, {

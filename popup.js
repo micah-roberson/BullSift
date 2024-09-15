@@ -166,6 +166,12 @@ function displayApiResponse(apiResponse) {
     console.log("Heres the api response: ");
     console.log(apiResponse);
 
+    const summaryText = apiResponse["data5"].response.split(",").slice(1);
+    console.log(summaryText);
+
+    const item = document.createElement("div");
+    item.innerHTML = `${summaryText}`;
+    responseElement.appendChild(item);
 
     // Create and append elements based on the structure of apiResponse
     for (const [key, value] of Object.entries(apiResponse)) {
@@ -173,7 +179,7 @@ function displayApiResponse(apiResponse) {
             continue;
         }
         const item = document.createElement("div");
-        item.innerHTML = `<strong>${value.response}`;
+        item.innerHTML = `${value.response}`;
         responseElement.appendChild(item);
     }
 }
