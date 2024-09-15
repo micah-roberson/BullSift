@@ -33,6 +33,7 @@
       border-radius: 10px;
       cursor: pointer;
       transition: background 0.3s ease;
+      width: 100%; /* Make button same width as slider */
     }
 
     button:hover {
@@ -41,17 +42,16 @@
 
     #explanationBox {
       border: 1px solid #ddd;
-      height: 300px;      
-      overflow-y: auto; 
       border-radius: 12px;
       padding: 15px;
-      font-size: 14px;
+      font-size: 14px; /* Make text smaller */
       margin: 20px 0;
       background-color: #fafafa;
-      width: 220px;
+      line-height: 1.4; /* Adjust line height for readability */
+      max-height: 150px; /* Set max height */
+      overflow-y: auto;  /* Add vertical scroll bar */
     }
 
-    /* Header styling with logo and text aligned horizontally */
     .header {
       display: flex;
       justify-content: space-between;
@@ -69,15 +69,14 @@
       margin-right: 10px;
     }
 
-    /* Flexbox to keep score and pt on the same line */
     .score {
       margin-left: 50px;
       display: flex;
       align-items: center;
       font-style: italic;
       color: grey;
-      font-size: 16px; /* Smaller text */
-      font-weight: normal; /* Remove bold */
+      font-size: 16px;
+      font-weight: normal;
     }
 
     .points-text {
@@ -103,7 +102,19 @@
       display: none;
     }
 
-    /* Slider styling */
+    .badge-container {
+      text-align: center;
+      margin-top: 20px; /* Adjust margin as needed */
+    }
+
+    .badge-container img {
+      display: none;
+      max-width: 100%;   /* Ensure it doesn’t overflow */
+      height: auto;      /* Maintain aspect ratio */
+      width: auto;       /* Let the image control its width */
+      margin: 0 auto;    /* Center the image */
+    }
+
     input[type="range"] {
       -webkit-appearance: none;
       width: 100%;
@@ -136,20 +147,9 @@
     }
 
     h3 {
-      margin-bottom: 20px;
-    }
-
-    /* Align Yes and No horizontally */
-    .radio-container {
-      display: flex;
-      justify-content: center;
-      gap: 30px; /* Spacing between Yes and No buttons */
-      margin-bottom: 20px;
-    }
-
-    label {
-      font-size: 16px;
-      cursor: pointer;
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: #808080; /* Set light grey color for the title */
     }
   </style>
 </head>
@@ -158,53 +158,44 @@
   <div class="container">
     <div class="header">
       <div class="logo-text">
-        <div class="logo-container">
-          <img src="bullsift1.png" alt="Logo">
-        </div>
-        <span style="font-size: 20px; font-weight: bold;">Bullsift</span> <!-- Text next to logo -->
+        <a href="https://micah-roberson.github.io/bullsiftwebsite/" target="_blank">
+          <div class="logo-container">
+            <img src="bullsift1.png" alt="Logo">
+          </div>
+        </a>
+        <span style="font-size: 20px; font-weight: bold;">Bullsift</span>
       </div>
-      <!-- Flexbox used to align score and pt on the same line, with smaller font size -->
       <div class="score">
         <span id="totalPoints">0</span><span>&nbsp;pt</span>
+        <img id="nobadge" src="icons/nobadge.png" alt="No Badge" style="height: 20px; margin-left: 5px; cursor: pointer;">
       </div>
     </div>
 
     <div id="questionSection">
-      <h3>Is this fake news?</h3>
-      <div class="radio-container">
-        <label>
-          <input type="radio" name="yesNo" id="yesOption"> Yes
-        </label>
-        <label>
-          <input type="radio" name="yesNo" id="noOption"> No
-        </label>
-      </div>
-
+      <h3>Is it Fake News?</h3> <!-- Title for the slider -->
       <div id="confidenceSection">
-        <h3>How confident are you?</h3>
         <input type="range" min="0" max="100" id="confidenceSlider" value="50">
-        <p>Confidence: <span id="confidenceValue">50</span>%</p>
+        <p>Likelihood of Fake News: <span id="confidenceValue">50</span>%</p>
       </div>
     </div>
 
     <div class="button-container">
-      <button id="answerButton">Answer</button>
+      <button id="answerButton">Submit</button> <!-- Button text changed to Submit -->
+    </div>
+
+    <!-- Badge PNG (Initially hidden) below the Submit button -->
+    <div class="badge-container" id="badgeContainer">
+      <img src="icons/badges.png" alt="Badge" id="badgeImage">
     </div>
 
     <div id="resultSection" class="hidden">
       <h2 id="resultText"></h2>
 
       <div id="explanationBox">
-        <p>
-          This is the explanation text. You can provide any details here about why the answer is correct or incorrect.
-        </p>
+        This is the explanation text. You can provide any details here about why the answer is correct or incorrect.
       </div>
 
       <p id="pointsText" class="points-text"></p>
-
-      <div class="button-container">
-        <button id="restartButton">Restart</button>
-      </div>
     </div>
 
     <div id="disabledPage" class="none" style="margin-bottom: 40px;">
@@ -217,3 +208,4 @@
 
 </body>
 </html>
+
