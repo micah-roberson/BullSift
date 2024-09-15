@@ -1,6 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("popup starting");
 
+    let curUrl;
+    chrome.storage.local.get(["currentUrl"], function (result) {
+        curUrl = result.currentUrl;
+        console.log("Current URL:", curUrl);
+    });
+
     // Fetch isWebsiteSafe from chrome.storage.local
     chrome.storage.local.get(["isWebsiteSafe"], function (result) {
         const isWebsiteSafe = result.isWebsiteSafe;
@@ -70,10 +76,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 const pointsText = document.getElementById("pointsText");
                 const confidenceValue = parseInt(slider.value);
 
-                // Fetch the API response to get the score
-                chrome.storage.local.get(["apiResponse"], function (result) {
-                    if (result.apiResponse && result.apiResponse["data5"]) {
-                        const score = parseInt(result.apiResponse["data5"].response.split(",")[0]);
+                // console.log("Hello: " + "apiResponse_" + curUrl);
+                // // Print out everything in chrome.storage.local
+                // chrome.storage.local.get(null, (items) => {
+                //     console.log("items:", items);
+                //     if (chrome.runtime.lastError) {
+                //         console.error("Error retrieving items from chrome.storage.local:", chrome.runtime.lastError);
+                //     } else {
+                //         console.log("All items in chrome.storage.local:");
+                //         console.log(items);
+                //     }
+                // });
+
+                const key = "apiResponse_" + curUrl;
+                chrome.storage.local.get([key], function (result) {
+                    if (result[key] && result[key]["data5"]) {
+                        const score = parseInt(result[key]["data5"].response.split(",")[0]);
                         console.log("API Score:", score);
 
                         // Determine if the confidence value is within ±20 of the score from the API
@@ -102,11 +120,10 @@ document.addEventListener("DOMContentLoaded", () => {
                             totalPointsDisplay.textContent = totalPoints;
                             localStorage.setItem("totalPoints", totalPoints);
 
-                            chrome.storage.local.get(["apiResponse"], function (result) {
-                                console.log("helloooo");
-                                console.log(result.apiResponse);
-                                if (result.apiResponse) {
-                                    displayApiResponse(result.apiResponse);
+                            chrome.storage.local.get([key], function (result) {
+                                console.log(result[key]);
+                                if (result[key]) {
+                                    displayApiResponse(result[key]);
                                 } else {
                                     document.getElementById("explanationBox").textContent =
                                         "No API response available."; // Use the explanation box

@@ -63,8 +63,13 @@ async function extractPageData() {
         const apiResponse = { data1, data2, data3, data4, data5 };
         console.log("setting apiResponse");
         console.log(apiResponse);
-        chrome.storage.local.set({ apiResponse: apiResponse }, function () {
-            console.log("API responses saved");
+        chrome.storage.local.get(["currentUrl"], function (result) {
+            const url = result.currentUrl || "";
+            const key = `apiResponse_${url}`;
+            console.log("key:", key);
+            chrome.storage.local.set({ [key]: apiResponse }, function () {
+                console.log("API responses saved for URL:", url);
+            });
         });
     } catch (error) {
         console.error("API Error:", error);
