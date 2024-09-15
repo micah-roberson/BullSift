@@ -50,6 +50,7 @@ function extractPageData() {
         .then((data) => {
             console.log("API Success:", data);
             // Store the response data
+            console.log("setting apiresponse")
             chrome.storage.local.set({ apiResponse: data }, function () {
                 console.log("API response saved");
             });
@@ -65,7 +66,9 @@ function extractPageData() {
 }
 
 if (document.readyState === "loading") {
+    console.log("calling api")
     document.addEventListener("DOMContentLoaded", extractPageData);
 } else {
+    console.log("calling api")
     extractPageData();
 }
